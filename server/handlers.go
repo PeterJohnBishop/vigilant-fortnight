@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,8 @@ func Ping() gin.HandlerFunc {
 			})
 			return
 		}
+
+		log.Println(payload)
 
 		c.JSON(http.StatusCreated, gin.H{
 			"message": "Payload received successfully",

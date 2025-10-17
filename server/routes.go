@@ -8,5 +8,5 @@ func AddBasicRoutes(r *gin.Engine) {
 }
 
 func AddWebhookRoutes(r *gin.Engine) {
-	r.POST("/webhook/ping", Ping())
+	r.POST("/webhook", Ping())
 }
