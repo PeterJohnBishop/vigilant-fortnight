@@ -2,10 +2,15 @@ package server
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"io"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,21 +31,40 @@ func Health() gin.HandlerFunc {
 	}
 }
 
+func VerifySignature(secret, signatureHeader string, body []byte) bool {
+	// Remove any possible prefix like "sha256=" from signature header
+	receivedSig := strings.TrimPrefix(signatureHeader, "sha256=")
+
+	// Compute HMAC-SHA256
+	mac := hmac.New(sha256.New, []byte(secret))
+	mac.Write(body)
+	expectedSig := hex.EncodeToString(mac.Sum(nil))
+
+	// Use constant-time comparison to avoid timing attacks
+	return hmac.Equal([]byte(receivedSig), []byte(expectedSig))
+}
+
 func HandlePayload() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var payload map[string]interface{}
+		var secret = os.Getenv("GITHUB_WEBHOOK_SECRET")
 
-		// Log headers as pretty JSON
 		logAsPrettyJSON("Headers", c.Request.Header)
 
-		// Read and log raw body
 		bodyBytes, _ := io.ReadAll(c.Request.Body)
-		log.Printf("Raw Body:\n%s", string(bodyBytes))
+		// log.Printf("Raw Body:\n%s", string(bodyBytes))
 
-		// Reset body for further reading
 		c.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
-		// Bind and log parsed JSON payload
+		signature := c.GetHeader("X-Hub-Signature-256")
+		if !VerifySignature(secret, signature, bodyBytes) {
+			log.Println("Invalid signature")
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "Invalid signature",
+			})
+			return
+		}
+
 		if err := c.ShouldBindJSON(&payload); err != nil {
 			log.Printf("JSON bind error: %v", err)
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -52,7 +76,6 @@ func HandlePayload() gin.HandlerFunc {
 
 		logAsPrettyJSON("Parsed Payload", payload)
 
-		// Respond
 		c.JSON(http.StatusCreated, gin.H{
 			"message": "Payload received successfully",
 			"payload": payload,
