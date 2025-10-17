@@ -10,6 +10,7 @@ import (
 func InitServer() {
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+	AddBasicRoutes(router)
 	AddWebhookRoutes(router)
 	port := os.Getenv("PORT")
 	if port == "" {
