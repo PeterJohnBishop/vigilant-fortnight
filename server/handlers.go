@@ -2,6 +2,7 @@ package server
 
 import (
 	"bytes"
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
@@ -25,19 +26,23 @@ func Health() gin.HandlerFunc {
 	}
 }
 
-func Ping() gin.HandlerFunc {
+func HandlePayload() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var payload map[string]interface{}
 
-		log.Println("Headers:", c.Request.Header)
+		// Log headers as pretty JSON
+		logAsPrettyJSON("Headers", c.Request.Header)
 
+		// Read and log raw body
 		bodyBytes, _ := io.ReadAll(c.Request.Body)
-		log.Println("Raw Body:", string(bodyBytes))
+		log.Printf("Raw Body:\n%s", string(bodyBytes))
 
+		// Reset body for further reading
 		c.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
+		// Bind and log parsed JSON payload
 		if err := c.ShouldBindJSON(&payload); err != nil {
-			log.Println("JSON bind error:", err)
+			log.Printf("JSON bind error: %v", err)
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error":  "Invalid JSON payload",
 				"detail": err.Error(),
@@ -45,11 +50,21 @@ func Ping() gin.HandlerFunc {
 			return
 		}
 
-		log.Println("Parsed payload:", payload)
+		logAsPrettyJSON("Parsed Payload", payload)
 
+		// Respond
 		c.JSON(http.StatusCreated, gin.H{
 			"message": "Payload received successfully",
 			"payload": payload,
 		})
 	}
+}
+
+func logAsPrettyJSON(label string, data interface{}) {
+	jsonBytes, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		log.Printf("%s: error marshaling JSON: %v", label, err)
+		return
+	}
+	log.Printf("%s:\n%s", label, string(jsonBytes))
 }
