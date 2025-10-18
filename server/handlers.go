@@ -16,7 +16,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Greet() gin.HandlerFunc {
+func Welcome() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.JSON(http.StatusCreated, gin.H{
 			"message": "Hello from Vigilnt-Fortnight",

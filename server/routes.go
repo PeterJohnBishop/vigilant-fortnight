@@ -3,7 +3,7 @@ package server
 import "github.com/gin-gonic/gin"
 
 func AddBasicRoutes(r *gin.Engine) {
-	r.GET("/", Greet())
+	r.GET("/", Welcome())
 	r.GET("/health", Health())
 }
 
