@@ -45,7 +45,7 @@ func VerifySignature(secret, signatureHeader string, body []byte) bool {
 	return hmac.Equal([]byte(receivedSig), []byte(expectedSig))
 }
 
-func HandlePayload() gin.HandlerFunc {
+func HandleGitHubPayload() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var secret = os.Getenv("GITHUB_WEBHOOK_SECRET")
 

@@ -8,5 +8,5 @@ func AddBasicRoutes(r *gin.Engine) {
 }
 
 func AddWebhookRoutes(r *gin.Engine) {
-	r.POST("/webhook", HandlePayload())
+	r.POST("/webhook/gh", HandleGitHubPayload())
 }
