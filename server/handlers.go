@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"vigilant-fortnight/models"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,14 +47,11 @@ func VerifySignature(secret, signatureHeader string, body []byte) bool {
 
 func HandlePayload() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var payload map[string]interface{}
 		var secret = os.Getenv("GITHUB_WEBHOOK_SECRET")
 
 		logAsPrettyJSON("Headers", c.Request.Header)
 
 		bodyBytes, _ := io.ReadAll(c.Request.Body)
-		// log.Printf("Raw Body:\n%s", string(bodyBytes))
-
 		c.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
 		signature := c.GetHeader("X-Hub-Signature-256")
@@ -65,6 +63,7 @@ func HandlePayload() gin.HandlerFunc {
 			return
 		}
 
+		var payload models.GitHubPushPayload
 		if err := c.ShouldBindJSON(&payload); err != nil {
 			log.Printf("JSON bind error: %v", err)
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -77,8 +76,12 @@ func HandlePayload() gin.HandlerFunc {
 		logAsPrettyJSON("Parsed Payload", payload)
 
 		c.JSON(http.StatusCreated, gin.H{
-			"message": "Payload received successfully",
-			"payload": payload,
+			"message":  "Payload received",
+			"branch":   payload.Ref,
+			"commits":  len(payload.Commits),
+			"repo":     payload.Repository.FullName,
+			"pusher":   payload.Pusher.Name,
+			"head_sha": payload.HeadCommit.ID,
 		})
 	}
 }
