@@ -49,7 +49,7 @@ type Repository struct {
 	Archived                 bool      `json:"archived"`
 	Disabled                 bool      `json:"disabled"`
 	OpenIssuesCount          int       `json:"open_issues_count"`
-	License                  *string   `json:"license"` // Can be expanded if needed
+	License                  *string   `json:"license"`
 	AllowForking             bool      `json:"allow_forking"`
 	IsTemplate               bool      `json:"is_template"`
 	WebCommitSignoffRequired bool      `json:"web_commit_signoff_required"`

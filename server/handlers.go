@@ -32,6 +32,15 @@ func Health() gin.HandlerFunc {
 	}
 }
 
+func logAsPrettyJSON(label string, data interface{}) {
+	jsonBytes, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		log.Printf("%s: error marshaling JSON: %v", label, err)
+		return
+	}
+	log.Printf("%s:\n%s", label, string(jsonBytes))
+}
+
 func VerifySignature(secret, signatureHeader string, body []byte) bool {
 	// Remove any possible prefix like "sha256=" from signature header
 	receivedSig := strings.TrimPrefix(signatureHeader, "sha256=")
@@ -43,6 +52,29 @@ func VerifySignature(secret, signatureHeader string, body []byte) bool {
 
 	// Use constant-time comparison to avoid timing attacks
 	return hmac.Equal([]byte(receivedSig), []byte(expectedSig))
+}
+
+func HandleWebhookPayload() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		logAsPrettyJSON("Headers", c.Request.Header)
+		bodyBytes, _ := io.ReadAll(c.Request.Body)
+		c.Request.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+
+		var payload map[string]interface{}
+		if err := c.ShouldBindJSON(&payload); err != nil {
+			log.Printf("JSON bind error: %v", err)
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":  "Invalid JSON payload",
+				"detail": err.Error(),
+			})
+			return
+		}
+		logAsPrettyJSON("Parsed Payload", payload)
+		c.JSON(http.StatusCreated, gin.H{
+			"message": "Payload received successfully",
+			"payload": payload,
+		})
+	}
 }
 
 func HandleGitHubPayload() gin.HandlerFunc {
@@ -84,13 +116,4 @@ func HandleGitHubPayload() gin.HandlerFunc {
 			"head_sha": payload.HeadCommit.ID,
 		})
 	}
-}
-
-func logAsPrettyJSON(label string, data interface{}) {
-	jsonBytes, err := json.MarshalIndent(data, "", "  ")
-	if err != nil {
-		log.Printf("%s: error marshaling JSON: %v", label, err)
-		return
-	}
-	log.Printf("%s:\n%s", label, string(jsonBytes))
 }

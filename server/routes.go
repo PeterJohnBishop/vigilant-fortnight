@@ -8,5 +8,6 @@ func AddBasicRoutes(r *gin.Engine) {
 }
 
 func AddWebhookRoutes(r *gin.Engine) {
+	r.POST("/webhook", HandleWebhookPayload()) // needs rate limiter
 	r.POST("/webhook/gh", HandleGitHubPayload())
 }
