@@ -9,8 +9,10 @@ import (
 
 func GetRepositories() (string, error) {
 	token := os.Getenv("GITHUB_API_KEY")
+	ghUser := os.Getenv("GITHUB_USER")
+	url := fmt.Sprintf("https://api.github.com/users/%s/repos", ghUser)
 
-	req, err := http.NewRequest("GET", "https://api.github.com/repositories", nil)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err.Error(), err
 	}
