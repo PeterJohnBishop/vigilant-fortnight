@@ -12,6 +12,7 @@ import (
 	"os"
 	"strings"
 	"vigilant-fortnight/models"
+	"vigilant-fortnight/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -115,5 +116,23 @@ func HandleGitHubPayload() gin.HandlerFunc {
 			"pusher":   payload.Pusher.Name,
 			"head_sha": payload.HeadCommit.ID,
 		})
+	}
+}
+
+func HandleGetRepos() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		response, err := services.GetRepositories()
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error":  "Error getting Repositories",
+				"detail": err.Error(),
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Repositories found!",
+			"data":    response,
+		})
+
 	}
 }

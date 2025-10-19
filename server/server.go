@@ -12,6 +12,7 @@ func InitServer() {
 	router := gin.Default()
 	AddBasicRoutes(router)
 	AddWebhookRoutes(router)
+	AddGitHubRoutes(router)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080" // default port if PORT is not set

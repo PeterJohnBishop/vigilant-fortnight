@@ -11,3 +11,7 @@ func AddWebhookRoutes(r *gin.Engine) {
 	r.POST("/webhook", HandleWebhookPayload()) // needs rate limiter
 	r.POST("/webhook/gh", HandleGitHubPayload())
 }
+
+func AddGitHubRoutes(r *gin.Engine) {
+	r.GET("/gh/repos", HandleGetRepos())
+}
