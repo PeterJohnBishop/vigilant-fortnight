@@ -121,7 +121,9 @@ func HandleGitHubPayload() gin.HandlerFunc {
 
 func HandleGetRepos() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		response, err := services.GetRepositories()
+		username := c.Param("username")
+
+		response, err := services.GetRepositories(username)
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
 				"error":  "Error getting Repositories",

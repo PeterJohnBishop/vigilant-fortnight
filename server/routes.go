@@ -13,5 +13,5 @@ func AddWebhookRoutes(r *gin.Engine) {
 }
 
 func AddGitHubRoutes(r *gin.Engine) {
-	r.GET("/gh/repos", HandleGetRepos())
+	r.GET("/gh/repos/:username", HandleGetRepos())
 }

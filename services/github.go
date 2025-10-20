@@ -7,10 +7,10 @@ import (
 	"os"
 )
 
-func GetRepositories() (string, error) {
+func GetRepositories(username string) (string, error) {
 	token := os.Getenv("GITHUB_API_KEY")
-	ghUser := os.Getenv("GITHUB_USER")
-	url := fmt.Sprintf("https://api.github.com/users/%s/repos", ghUser)
+	// ghUser := os.Getenv("GITHUB_USER")
+	url := fmt.Sprintf("https://api.github.com/users/%s/repos", username)
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
