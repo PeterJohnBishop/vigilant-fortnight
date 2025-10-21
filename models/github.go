@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type GitHubPushPayload struct {
 	Ref        string     `json:"ref"`
 	Before     string     `json:"before"`
@@ -18,49 +20,49 @@ type GitHubPushPayload struct {
 
 type Repos []Repository
 type Repository struct {
-	ID                       int64    `json:"id"`
-	NodeID                   string   `json:"node_id"`
-	Name                     string   `json:"name"`
-	FullName                 string   `json:"full_name"`
-	Private                  bool     `json:"private"`
-	Owner                    User     `json:"owner"`
-	HTMLURL                  string   `json:"html_url"`
-	Fork                     bool     `json:"fork"`
-	URL                      string   `json:"url"`
-	CreatedAt                int64    `json:"created_at"`
-	UpdatedAt                string   `json:"updated_at"`
-	PushedAt                 int64    `json:"pushed_at"`
-	GitURL                   string   `json:"git_url"`
-	SSHURL                   string   `json:"ssh_url"`
-	CloneURL                 string   `json:"clone_url"`
-	SVNURL                   string   `json:"svn_url"`
-	Homepage                 *string  `json:"homepage"`
-	Size                     int      `json:"size"`
-	StargazersCount          int      `json:"stargazers_count"`
-	WatchersCount            int      `json:"watchers_count"`
-	Language                 *string  `json:"language"`
-	HasIssues                bool     `json:"has_issues"`
-	HasProjects              bool     `json:"has_projects"`
-	HasDownloads             bool     `json:"has_downloads"`
-	HasWiki                  bool     `json:"has_wiki"`
-	HasPages                 bool     `json:"has_pages"`
-	HasDiscussions           bool     `json:"has_discussions"`
-	ForksCount               int      `json:"forks_count"`
-	MirrorURL                *string  `json:"mirror_url"`
-	Archived                 bool     `json:"archived"`
-	Disabled                 bool     `json:"disabled"`
-	OpenIssuesCount          int      `json:"open_issues_count"`
-	License                  *string  `json:"license"`
-	AllowForking             bool     `json:"allow_forking"`
-	IsTemplate               bool     `json:"is_template"`
-	WebCommitSignoffRequired bool     `json:"web_commit_signoff_required"`
-	Topics                   []string `json:"topics"`
-	Visibility               string   `json:"visibility"`
-	Forks                    int      `json:"forks"`
-	OpenIssues               int      `json:"open_issues"`
-	Watchers                 int      `json:"watchers"`
-	DefaultBranch            string   `json:"default_branch"`
-	MasterBranch             string   `json:"master_branch"`
+	ID                       int64     `json:"id"`
+	NodeID                   string    `json:"node_id"`
+	Name                     string    `json:"name"`
+	FullName                 string    `json:"full_name"`
+	Private                  bool      `json:"private"`
+	Owner                    User      `json:"owner"`
+	HTMLURL                  string    `json:"html_url"`
+	Fork                     bool      `json:"fork"`
+	URL                      string    `json:"url"`
+	CreatedAt                time.Time `json:"created_at"`
+	UpdatedAt                time.Time `json:"updated_at"`
+	PushedAt                 time.Time `json:"pushed_at"`
+	GitURL                   string    `json:"git_url"`
+	SSHURL                   string    `json:"ssh_url"`
+	CloneURL                 string    `json:"clone_url"`
+	SVNURL                   string    `json:"svn_url"`
+	Homepage                 *string   `json:"homepage"`
+	Size                     int       `json:"size"`
+	StargazersCount          int       `json:"stargazers_count"`
+	WatchersCount            int       `json:"watchers_count"`
+	Language                 *string   `json:"language"`
+	HasIssues                bool      `json:"has_issues"`
+	HasProjects              bool      `json:"has_projects"`
+	HasDownloads             bool      `json:"has_downloads"`
+	HasWiki                  bool      `json:"has_wiki"`
+	HasPages                 bool      `json:"has_pages"`
+	HasDiscussions           bool      `json:"has_discussions"`
+	ForksCount               int       `json:"forks_count"`
+	MirrorURL                *string   `json:"mirror_url"`
+	Archived                 bool      `json:"archived"`
+	Disabled                 bool      `json:"disabled"`
+	OpenIssuesCount          int       `json:"open_issues_count"`
+	License                  *string   `json:"license"`
+	AllowForking             bool      `json:"allow_forking"`
+	IsTemplate               bool      `json:"is_template"`
+	WebCommitSignoffRequired bool      `json:"web_commit_signoff_required"`
+	Topics                   []string  `json:"topics"`
+	Visibility               string    `json:"visibility"`
+	Forks                    int       `json:"forks"`
+	OpenIssues               int       `json:"open_issues"`
+	Watchers                 int       `json:"watchers"`
+	DefaultBranch            string    `json:"default_branch"`
+	MasterBranch             string    `json:"master_branch"`
 }
 type Pusher struct {
 	Name  string `json:"name"`
