@@ -5,8 +5,8 @@ type GitHubPushPayload struct {
 	Before     string     `json:"before"`
 	After      string     `json:"after"`
 	Repository Repository `json:"repository"`
-	Pusher     Pusher     `json:"pusher"`
-	Sender     Sender     `json:"sender"`
+	Pusher     User       `json:"pusher"`
+	Sender     User       `json:"sender"`
 	Created    bool       `json:"created"`
 	Deleted    bool       `json:"deleted"`
 	Forced     bool       `json:"forced"`
@@ -16,103 +16,56 @@ type GitHubPushPayload struct {
 	HeadCommit Commit     `json:"head_commit"`
 }
 
+type Repos []Repository
 type Repository struct {
-	ID                       int64     `json:"id"`
-	NodeID                   string    `json:"node_id"`
-	Name                     string    `json:"name"`
-	FullName                 string    `json:"full_name"`
-	Private                  bool      `json:"private"`
-	Owner                    RepoOwner `json:"owner"`
-	HTMLURL                  string    `json:"html_url"`
-	Fork                     bool      `json:"fork"`
-	URL                      string    `json:"url"`
-	CreatedAt                int64     `json:"created_at"`
-	UpdatedAt                string    `json:"updated_at"`
-	PushedAt                 int64     `json:"pushed_at"`
-	GitURL                   string    `json:"git_url"`
-	SSHURL                   string    `json:"ssh_url"`
-	CloneURL                 string    `json:"clone_url"`
-	SVNURL                   string    `json:"svn_url"`
-	Homepage                 *string   `json:"homepage"`
-	Size                     int       `json:"size"`
-	StargazersCount          int       `json:"stargazers_count"`
-	WatchersCount            int       `json:"watchers_count"`
-	Language                 *string   `json:"language"`
-	HasIssues                bool      `json:"has_issues"`
-	HasProjects              bool      `json:"has_projects"`
-	HasDownloads             bool      `json:"has_downloads"`
-	HasWiki                  bool      `json:"has_wiki"`
-	HasPages                 bool      `json:"has_pages"`
-	HasDiscussions           bool      `json:"has_discussions"`
-	ForksCount               int       `json:"forks_count"`
-	MirrorURL                *string   `json:"mirror_url"`
-	Archived                 bool      `json:"archived"`
-	Disabled                 bool      `json:"disabled"`
-	OpenIssuesCount          int       `json:"open_issues_count"`
-	License                  *string   `json:"license"`
-	AllowForking             bool      `json:"allow_forking"`
-	IsTemplate               bool      `json:"is_template"`
-	WebCommitSignoffRequired bool      `json:"web_commit_signoff_required"`
-	Topics                   []string  `json:"topics"`
-	Visibility               string    `json:"visibility"`
-	Forks                    int       `json:"forks"`
-	OpenIssues               int       `json:"open_issues"`
-	Watchers                 int       `json:"watchers"`
-	DefaultBranch            string    `json:"default_branch"`
-	MasterBranch             string    `json:"master_branch"`
+	ID                       int64    `json:"id"`
+	NodeID                   string   `json:"node_id"`
+	Name                     string   `json:"name"`
+	FullName                 string   `json:"full_name"`
+	Private                  bool     `json:"private"`
+	Owner                    User     `json:"owner"`
+	HTMLURL                  string   `json:"html_url"`
+	Fork                     bool     `json:"fork"`
+	URL                      string   `json:"url"`
+	CreatedAt                int64    `json:"created_at"`
+	UpdatedAt                string   `json:"updated_at"`
+	PushedAt                 int64    `json:"pushed_at"`
+	GitURL                   string   `json:"git_url"`
+	SSHURL                   string   `json:"ssh_url"`
+	CloneURL                 string   `json:"clone_url"`
+	SVNURL                   string   `json:"svn_url"`
+	Homepage                 *string  `json:"homepage"`
+	Size                     int      `json:"size"`
+	StargazersCount          int      `json:"stargazers_count"`
+	WatchersCount            int      `json:"watchers_count"`
+	Language                 *string  `json:"language"`
+	HasIssues                bool     `json:"has_issues"`
+	HasProjects              bool     `json:"has_projects"`
+	HasDownloads             bool     `json:"has_downloads"`
+	HasWiki                  bool     `json:"has_wiki"`
+	HasPages                 bool     `json:"has_pages"`
+	HasDiscussions           bool     `json:"has_discussions"`
+	ForksCount               int      `json:"forks_count"`
+	MirrorURL                *string  `json:"mirror_url"`
+	Archived                 bool     `json:"archived"`
+	Disabled                 bool     `json:"disabled"`
+	OpenIssuesCount          int      `json:"open_issues_count"`
+	License                  *string  `json:"license"`
+	AllowForking             bool     `json:"allow_forking"`
+	IsTemplate               bool     `json:"is_template"`
+	WebCommitSignoffRequired bool     `json:"web_commit_signoff_required"`
+	Topics                   []string `json:"topics"`
+	Visibility               string   `json:"visibility"`
+	Forks                    int      `json:"forks"`
+	OpenIssues               int      `json:"open_issues"`
+	Watchers                 int      `json:"watchers"`
+	DefaultBranch            string   `json:"default_branch"`
+	MasterBranch             string   `json:"master_branch"`
 }
-
-type RepoOwner struct {
-	Name              string `json:"name"`
-	Email             string `json:"email"`
-	Login             string `json:"login"`
-	ID                int    `json:"id"`
-	NodeID            string `json:"node_id"`
-	AvatarURL         string `json:"avatar_url"`
-	GravatarID        string `json:"gravatar_id"`
-	URL               string `json:"url"`
-	HTMLURL           string `json:"html_url"`
-	FollowersURL      string `json:"followers_url"`
-	FollowingURL      string `json:"following_url"`
-	GistsURL          string `json:"gists_url"`
-	StarredURL        string `json:"starred_url"`
-	SubscriptionsURL  string `json:"subscriptions_url"`
-	OrganizationsURL  string `json:"organizations_url"`
-	ReposURL          string `json:"repos_url"`
-	EventsURL         string `json:"events_url"`
-	ReceivedEventsURL string `json:"received_events_url"`
-	Type              string `json:"type"`
-	UserViewType      string `json:"user_view_type"`
-	SiteAdmin         bool   `json:"site_admin"`
-}
-
 type Pusher struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
-
-type Sender struct {
-	Login             string `json:"login"`
-	ID                int    `json:"id"`
-	NodeID            string `json:"node_id"`
-	AvatarURL         string `json:"avatar_url"`
-	GravatarID        string `json:"gravatar_id"`
-	URL               string `json:"url"`
-	HTMLURL           string `json:"html_url"`
-	FollowersURL      string `json:"followers_url"`
-	FollowingURL      string `json:"following_url"`
-	GistsURL          string `json:"gists_url"`
-	StarredURL        string `json:"starred_url"`
-	SubscriptionsURL  string `json:"subscriptions_url"`
-	OrganizationsURL  string `json:"organizations_url"`
-	ReposURL          string `json:"repos_url"`
-	EventsURL         string `json:"events_url"`
-	ReceivedEventsURL string `json:"received_events_url"`
-	Type              string `json:"type"`
-	UserViewType      string `json:"user_view_type"`
-	SiteAdmin         bool   `json:"site_admin"`
-}
-
 type Commit struct {
 	ID        string   `json:"id"`
 	TreeID    string   `json:"tree_id"`
@@ -131,4 +84,67 @@ type GitUser struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Username string `json:"username"`
+}
+
+type User struct {
+	Name              *string `json:"name,omitempty"`
+	Email             *string `json:"email,omitempty"`
+	Login             string  `json:"login"` // required in schema
+	ID                *int64  `json:"id,omitempty"`
+	NodeID            *string `json:"node_id,omitempty"`
+	AvatarURL         string  `json:"avatar_url"` // required
+	GravatarID        *string `json:"gravatar_id,omitempty"`
+	URL               string  `json:"url"`                 // required
+	HTMLURL           string  `json:"html_url"`            // required
+	FollowersURL      string  `json:"followers_url"`       // required
+	FollowingURL      string  `json:"following_url"`       // required
+	GistsURL          string  `json:"gists_url"`           // required
+	StarredURL        string  `json:"starred_url"`         // required
+	SubscriptionsURL  string  `json:"subscriptions_url"`   // required
+	OrganizationsURL  string  `json:"organizations_url"`   // required
+	ReposURL          string  `json:"repos_url"`           // required
+	EventsURL         string  `json:"events_url"`          // required
+	ReceivedEventsURL string  `json:"received_events_url"` // required
+	Type              string  `json:"type"`                // required
+	SiteAdmin         bool    `json:"site_admin"`          // required
+	StarredAt         *string `json:"starred_at,omitempty"`
+	UserViewType      *string `json:"user_view_type,omitempty"`
+}
+
+type Permissions struct {
+	Admin    *bool `json:"admin,omitempty"`
+	Maintain *bool `json:"maintain,omitempty"`
+	Push     *bool `json:"push,omitempty"`
+	Triage   *bool `json:"triage,omitempty"`
+	Pull     *bool `json:"pull,omitempty"`
+}
+
+type CodeOfConduct struct {
+	Key     *string `json:"key,omitempty"`
+	Name    *string `json:"name,omitempty"`
+	URL     *string `json:"url,omitempty"`
+	Body    *string `json:"body,omitempty"`
+	HTMLURL *string `json:"html_url,omitempty"`
+}
+
+type License struct {
+	Key    *string `json:"key,omitempty"`
+	Name   *string `json:"name,omitempty"`
+	SpdxID *string `json:"spdx_id,omitempty"`
+	URL    *string `json:"url,omitempty"`
+	NodeID *string `json:"node_id,omitempty"`
+}
+
+type AnalysisStatus struct {
+	Status *string `json:"status,omitempty"` // "enabled" | "disabled"
+}
+
+type SecurityAndAnalysis struct {
+	AdvancedSecurity                  *AnalysisStatus `json:"advanced_security,omitempty"`
+	CodeSecurity                      *AnalysisStatus `json:"code_security,omitempty"`
+	DependabotSecurityUpdates         *AnalysisStatus `json:"dependabot_security_updates,omitempty"`
+	SecretScanning                    *AnalysisStatus `json:"secret_scanning,omitempty"`
+	SecretScanningPushProtection      *AnalysisStatus `json:"secret_scanning_push_protection,omitempty"`
+	SecretScanningNonProviderPatterns *AnalysisStatus `json:"secret_scanning_non_provider_patterns,omitempty"`
+	SecretScanningAIDetection         *AnalysisStatus `json:"secret_scanning_ai_detection,omitempty"`
 }
